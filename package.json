@@ -8,7 +8,7 @@
     "db:migrate:local": "wrangler d1 migrations apply attack_name_backend_db --local",
     "db:migrate:remote": "wrangler d1 migrations apply attack_name_backend_db --remote",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "deploy": "wrangler deploy --name 'app-attacknamebackend' --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {

@@ -1,8 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "app-attacknamebacend",
+  "name": "app-attacknamebackend",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-30",
+  "keep_vars": true,
   "d1_databases": [
     {
       "binding": "attack_name_backend_db",
