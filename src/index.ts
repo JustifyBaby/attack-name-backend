@@ -17,9 +17,10 @@ const app = new Hono<AppEnv>();
 
 const createAttackNameSchema = z.object({
   attackName: z.string().trim().min(1).max(50),
-  description: z.string().trim().min(1).max(2000),
+  description: z.string().trim().min(1).max(500),
   author: z.string().trim().min(1).max(50),
-  tag: z.string().trim().min(1).max(50),
+  tag: z.enum(["攻撃", "回避"]),
+  effectId: z.number().int().min(0).max(2).default(0),
 }).strict();
 
 const idSchema = z.object({

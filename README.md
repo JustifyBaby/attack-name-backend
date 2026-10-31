@@ -75,12 +75,16 @@ POSTは `Content-Type: application/json` を指定します。
   "attackName": "流星拳",
   "description": "星の勢いで放つ拳",
   "author": "学生",
-  "tag": "格闘"
+  "tag": "攻撃",
+  "effectId": 0
 }
 ```
 
-4項目とも必須の文字列です。前後の空白を除き、空文字は拒否します。
-`attackName`・`author`・`tag` は最大50文字、`description` は最大2000文字です。
+`attackName`・`description`・`author` は必須の文字列です。前後の空白を除き、空文字は拒否します。
+`attackName`・`author` は最大50文字、`description` は最大500文字です。
+`tag` は `攻撃` または `回避` のみ受け付けます。
+`effectId` は0（閃光の軌跡）・1（旋風の輪）・2（残像ステップ）の整数で、省略時は0です。
+既存の投稿にもマイグレーションで0が設定されます。
 未知の項目、クライアントからの `id`・`createdAt` 指定も400で拒否します。
 `id` は自動採番、`createdAt` はサーバーで生成するUTCのISO 8601文字列です。
 DELETEのIDは正の安全な整数のみ受け付け、不正な値は400を返します。
@@ -100,12 +104,22 @@ npm run db:migrate:remote
 npm run deploy
 ```
 
-現在のWrangler設定は `remote: true` のため、`npm run dev` もリモートD1へ接続します。
-ローカルD1で開発する場合は `remote` を `false` に変更し、以下を実行します。
+開発時は `remote: false` でローカルD1に接続し、Cloudflare認証は不要です。
+`docker compose up --build` は起動時にローカルのマイグレーションを適用します。
+ローカルDBは名前付きボリュームに保存するため、コンテナを再作成しても残ります。
+本番へのデプロイ時には、設定済みのCloudflare D1が使われます。
+Node.jsを直接使う場合は以下を実行します。
 
 ```sh
 npm run db:migrate:local
 npm run dev
+```
+
+起動中のコンテナに入るには `docker compose exec backend bash` を実行します。
+起動に失敗している場合も、以下でシェルだけを起動できます。
+
+```sh
+docker compose run --rm --no-deps backend bash
 ```
 
 Node.jsがない場合はDockerイメージをビルドし、同じコマンドを

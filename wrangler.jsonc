@@ -9,7 +9,7 @@
 			"database_name": "attack-name-backend-db",
 			"database_id": "be8e18f9-6b76-4995-ac1e-014e158a8202",
 			"migrations_dir": "drizzle",
-			"remote": true
+			"remote": false
 		}
 	]
 	// "compatibility_flags": [

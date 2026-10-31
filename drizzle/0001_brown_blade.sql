@@ -1,0 +1,1 @@
+ALTER TABLE `attack_names` ADD `effect_id` integer DEFAULT 0 NOT NULL;

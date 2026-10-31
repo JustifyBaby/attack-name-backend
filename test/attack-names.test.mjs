@@ -30,7 +30,7 @@ test('attack names API with local D1', async (t) => {
       ...options.headers,
     },
   }, env)
-  const input = { attackName: '流星拳', description: '星の勢いで放つ拳', author: '学生', tag: '格闘' }
+  const input = { attackName: '流星拳', description: '星の勢いで放つ拳', author: '学生', tag: '攻撃' }
 
   await t.test('empty database returns an empty array', async () => {
     const res = await request()
@@ -49,8 +49,9 @@ test('attack names API with local D1', async (t) => {
     const invalid = [
       {}, { ...input, attackName: '   ' }, { ...input, attackName: 'a'.repeat(51) },
       { ...input, author: 'a'.repeat(51) }, { ...input, description: '' },
-      { ...input, description: 'a'.repeat(2001) }, { ...input, tag: 'a'.repeat(51) },
+      { ...input, description: 'a'.repeat(501) }, { ...input, tag: '補助' },
       { ...input, tag: 1 }, { ...input, id: 99 }, { ...input, createdAt: 'yesterday' },
+      { ...input, effectId: -1 }, { ...input, effectId: 3 }, { ...input, effectId: 1.5 },
     ]
     for (const value of invalid) {
       const res = await request('', { method: 'POST', body: JSON.stringify(value) })
@@ -68,11 +69,12 @@ test('attack names API with local D1', async (t) => {
     const row = await res.json()
     id = row.id
     assert.equal(res.headers.get('Location'), `/attack-names/${id}`)
-    assert.deepEqual(row, { ...input, id, createdAt: row.createdAt })
+    assert.deepEqual(row, { ...input, id, effectId: 0, createdAt: row.createdAt })
     assert.equal(new Date(row.createdAt).toISOString(), row.createdAt)
-    const second = await request('', { method: 'POST', body: JSON.stringify(input) })
+    const second = await request('', { method: 'POST', body: JSON.stringify({ ...input, tag: '回避', effectId: 2 }) })
     assert.equal(second.status, 201)
     const secondRow = await second.json()
+    assert.equal(secondRow.effectId, 2)
     const list = await request()
     assert.equal(list.status, 200)
     assert.deepEqual(await list.json(), [row, secondRow])
