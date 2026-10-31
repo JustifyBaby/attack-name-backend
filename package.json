@@ -3,14 +3,24 @@
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply attack_name_backend_db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply attack_name_backend_db --remote",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "hono": "^4.13.14"
+    "@hono/zod-validator": "^0.9.1",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.14",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.31.11",
+    "miniflare": "^5.20261023.3-beta",
+    "typescript": "^7.0.2",
     "wrangler": "^4.110.0"
   }
 }
