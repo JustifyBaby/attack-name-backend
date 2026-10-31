@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    command: ["npm", "run", "dev", "--", "--ip", "0.0.0.0"]
+    ports:
+      - "8787:8787"
+    volumes:
+      - type: bind
+        source: ./.dev.vars
+        target: /workspaces/attack-name-backend/.dev.vars
+        read_only: true
+        bind:
+          create_host_path: false

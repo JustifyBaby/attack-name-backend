@@ -1,0 +1,2 @@
+# Copy to .dev.vars and set a randomly generated token.
+API_TOKEN=
